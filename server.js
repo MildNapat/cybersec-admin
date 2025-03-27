@@ -13,13 +13,14 @@ app.get("/", (req, res) => {
   res.send("Hello World!!");
 });
 
-// ดึงข้อมูล User (ซ่อน password)
+// ดึงข้อมูล User (แสดงรหัสผ่านที่เข้ารหัส)
 app.get("/user", async (req, res) => {
   try {
     const data = await prisma.user.findMany({
       select: {
         id: true,
         username: true,
+        password: true, // แสดง password ที่เข้ารหัสแล้ว
       },
     });
 
@@ -37,13 +38,14 @@ app.post("/user", async (req, res) => {
       return res.status(400).json({ message: "Username and password are required" });
     }
 
+    // เข้ารหัสรหัสผ่าน
     const encodedPassword = CryptoJS.AES.encrypt(password, secretKey).toString();
 
     const response = await prisma.user.create({
       data: { username, password: encodedPassword },
     });
 
-    res.json({ message: "User added successfully", data: { id: response.id, username: response.username } });
+    res.json({ message: "User added successfully", data: { id: response.id, username: response.username, password: encodedPassword } });
   } catch (error) {
     res.status(500).json({ message: "Error adding user", error: error.message });
   }
@@ -66,13 +68,13 @@ app.put("/user/:id", async (req, res) => {
       data: { username, password: encodedPassword },
     });
 
-    res.json({ message: "User updated successfully", data: { id: response.id, username: response.username } });
+    res.json({ message: "User updated successfully", data: { id: response.id, username: response.username, password: encodedPassword } });
   } catch (error) {
     res.status(500).json({ message: "Error updating user", error: error.message });
   }
 });
 
-// ค้นหา User (ซ่อน password)
+// ค้นหา User (แสดงรหัสผ่านที่เข้ารหัสแล้ว)
 app.get("/user/search", async (req, res) => {
   try {
     const { q } = req.query;
@@ -89,6 +91,7 @@ app.get("/user/search", async (req, res) => {
       select: {
         id: true,
         username: true,
+        password: true, // แสดง password ที่เข้ารหัสแล้ว
       },
     });
 
