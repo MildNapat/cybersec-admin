@@ -1,25 +1,24 @@
-###(CREATE)
-POST http://localhost:3000/user
+### Create User
+POST  http://localhost:3000/user
 Content-Type: application/json
 
 {
-    "username": "demo2",
-    "password": "demo2"
+        "username": "NapatMild",
+        "password": "Pass3"
 }
-
-###(READ)
-GET http://localhost:3000/user
-
-###(UPDATE)
-# เปลี่ยน ":id" เป็น ID ของ user จริง เช่น /user/1
-PUT http://localhost:3000/user/1
+    
+### Update User
+PUT http://localhost:3000/user/7
 Content-Type: application/json
 
 {
-    "username": "napat",
-    "password": "789"
+    "username": "demo12edit",
+    "password": "newpassword"
 }
 
-### (DELETE) - ลบผู้ใช้
-# เปลี่ยน ":id" เป็น ID จริงของผู้ใช้ เช่น /user/4
-DELETE http://localhost:3000/user/2
+### Delete User
+DELETE http://localhost:3000/user/6
+
+### Search User
+GET http://localhost:3000/user/search?q=d
+Content-Type: application/json
